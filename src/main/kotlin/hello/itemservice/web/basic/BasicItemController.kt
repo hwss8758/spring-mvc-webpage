@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import javax.annotation.PostConstruct
 
@@ -27,6 +28,11 @@ class BasicItemController(private val itemRepository: ItemRepository) {
         return "basic/item"
     }
 
+    @GetMapping("/add")
+    fun addForm(): String = "basic/addForm"
+
+    @PostMapping("/add")
+    fun save(): String = "basic/addForm"
 
     @PostConstruct
     fun init() {
