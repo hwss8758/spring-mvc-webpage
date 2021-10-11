@@ -5,9 +5,11 @@ import hello.itemservice.domain.item.ItemRepository
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import javax.annotation.PostConstruct
 
 @Controller
@@ -31,8 +33,47 @@ class BasicItemController(private val itemRepository: ItemRepository) {
     @GetMapping("/add")
     fun addForm(): String = "basic/addForm"
 
+    //    @PostMapping("/add")
+    fun addItemV1(
+        @RequestParam itemName: String,
+        @RequestParam price: Int,
+        @RequestParam quantity: Int,
+        model: Model
+    ): String {
+        val item = Item(itemName, price, quantity)
+        itemRepository.save(item)
+        model.addAttribute("item", item)
+
+        return "basic/item"
+    }
+
+    //    @PostMapping("/add")
+    fun addItemV2(
+        @ModelAttribute("item") item: Item,
+        model: Model
+    ): String {
+        itemRepository.save(item)
+        model.addAttribute("item", item) // ModelAttribute 사용 시 자동 추가, 생략 가능
+        return "basic/item"
+    }
+
+    //    @PostMapping("/add")
+    fun addItemV3(@ModelAttribute("item") item: Item): String {
+        itemRepository.save(item)
+        return "basic/item"
+    }
+
+    //    @PostMapping("/add")
+    fun addItemV4(@ModelAttribute item: Item): String {
+        itemRepository.save(item)
+        return "basic/item"
+    }
+
     @PostMapping("/add")
-    fun save(): String = "basic/addForm"
+    fun addItemV5(item: Item): String {
+        itemRepository.save(item)
+        return "basic/item"
+    }
 
     @PostConstruct
     fun init() {
