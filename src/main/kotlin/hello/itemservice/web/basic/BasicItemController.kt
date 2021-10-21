@@ -75,6 +75,19 @@ class BasicItemController(private val itemRepository: ItemRepository) {
         return "basic/item"
     }
 
+    @GetMapping("/{itemId}/edit")
+    fun editForm(@PathVariable itemId: Long, model: Model): String {
+        val item = itemRepository.findById(itemId)
+        model.addAttribute("item", item)
+        return "basic/editForm"
+    }
+
+    @PostMapping("/{itemId}/edit")
+    fun editForm(@PathVariable itemId: Long, @ModelAttribute item: Item): String {
+        itemRepository.update(itemId, item)
+        return "redirect:/basic/items/{itemId}"
+    }
+
     @PostConstruct
     fun init() {
         itemRepository.save(Item("itemA", 10000, 10))
