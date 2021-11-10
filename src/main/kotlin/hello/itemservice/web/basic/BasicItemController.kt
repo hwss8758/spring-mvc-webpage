@@ -69,10 +69,16 @@ class BasicItemController(private val itemRepository: ItemRepository) {
         return "basic/item"
     }
 
-    @PostMapping("/add")
+    //    @PostMapping("/add")
     fun addItemV5(item: Item): String {
         itemRepository.save(item)
         return "basic/item"
+    }
+
+    @PostMapping("/add")
+    fun addItemV6Redirect(item: Item): String {
+        itemRepository.save(item)
+        return "redirect:/basic/items/${item.id}"
     }
 
     @GetMapping("/{itemId}/edit")
