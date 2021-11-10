@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import javax.annotation.PostConstruct
 
 @Controller
@@ -75,10 +76,20 @@ class BasicItemController(private val itemRepository: ItemRepository) {
         return "basic/item"
     }
 
-    @PostMapping("/add")
+//    @PostMapping("/add")
     fun addItemV6Redirect(item: Item): String {
         itemRepository.save(item)
         return "redirect:/basic/items/${item.id}"
+    }
+
+    @PostMapping("/add")
+    fun addItemV7Redirect(item: Item, redirectAttributes: RedirectAttributes): String {
+        val savedItem = itemRepository.save(item)
+
+        redirectAttributes.addAttribute("itemId", savedItem.id)
+        redirectAttributes.addAttribute("status", true)
+
+        return "redirect:/basic/items/{itemId}"
     }
 
     @GetMapping("/{itemId}/edit")
